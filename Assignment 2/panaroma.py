@@ -4,7 +4,7 @@ import sys
 import glob
 import matplotlib.pyplot as plt
 
-image_paths = glob.glob(r"D:\USC\Advanced Computer Vision\Assignment 2\New Folder\*.jpg")
+image_paths = glob.glob(r"New Folder\*.jpg")
 if not image_paths:
     sys.exit("Error: No images found in the directory")
 
@@ -115,43 +115,32 @@ for i in range(idx_center, count-1):
 
 min_x = min_y = max_x = max_y = 0.0
 for i in range(len(images)):
-    # Get the height and width of the original images
     h, w, p = images[i].shape
-    # Create a list of points to represent the corners of the images
     corners = np.array([[0, 0], [w, 0], [w, h], [0, h]], dtype=np.float32)
-    # Calculate the transformed corners
     transformed_corners = cv2.perspectiveTransform(corners.reshape(-1, 1, 2), cumulative_homographies[i])
-    # Find the minimum and maximum coordinates to determine the output size
     min_x = min(transformed_corners[:, 0, 0].min(), min_x)
     min_y = min(transformed_corners[:, 0, 1].min(), min_y)
     max_x = max(transformed_corners[:, 0, 0].max(), max_x)
     max_y = max(transformed_corners[:, 0, 1].max(), max_y)
 
-# Calculate the width and height of the stitched image
 output_width = int(max_x - min_x)
 output_height = int(max_y - min_y)
 
-# blend the transformed images
 panorama = np.zeros((output_height, output_width, 3), dtype=np.uint8)
 warped_images = []
 
 for i in range(len(images)):
-    # create offset transformation
     offset_x = int(-min_x)
     offset_y = int(-min_y)
     transformation = np.array([[1, 0, offset_x], [0, 1, offset_y], [0, 0, 1]])
-    # warp images
     warped = cv2.warpPerspective(images[i], np.dot(transformation, cumulative_homographies[i]), (output_width, output_height), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     warped_images.append(warped)
-    # create logical mask for warped image and previous panorama
     mask = np.where(warped > 0, 1, 0).astype(np.uint8)
     panorama_mask = np.where(panorama > 0, 1, 0).astype(np.uint8) 
-    # alpha blending
     panorama = np.where(mask == 1, warped, panorama)
     alpha = 0.5
     panorama = np.where((mask == 1) & (panorama_mask == 1), (warped * alpha + panorama * (1-alpha)).astype(np.uint8), panorama)
 
-# display the panorama
 fig = plt.figure(figsize=(10, 8), dpi=200)
 
 plt.imshow(cv2.cvtColor(panorama, cv2.COLOR_BGR2RGB))
