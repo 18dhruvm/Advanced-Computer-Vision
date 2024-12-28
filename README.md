@@ -1,6 +1,6 @@
 # Advanced Computer Vision Projects
 
-This repository contains the various assignments under USC CSCI 677 - Advanced Computer Vision.
+This repository contains the various assignments under USC CSCI 677 - Advance Computer Vision.
 
 ## Structure
 
