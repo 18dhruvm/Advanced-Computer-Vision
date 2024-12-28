@@ -1,12 +1,8 @@
-# 2D to 3D model
-
-This project is a Python implementation for creating a 3D model from a set of 2D overlapping images using COLMAP and Gaussian Splatting.
-
-# SFM and Gaussian Splatting Assignment
+# SFM and Gaussian Splatting
 
 ## Overview
 
-This assignment involves two main tasks:
+This involves two main tasks:
 
 - Using COLMAP for Structure from Motion (SFM) to infer camera poses and reconstruct 3D positions of sparse points from images.
 - Using Gaussian Splatting (GS) to train a model with the outputs of COLMAP and render images from novel viewpoints.
@@ -16,7 +12,7 @@ This assignment involves two main tasks:
 Prerequisites
 
 - Install COLMAP from [GitHub](https://github.com/colmap/colmap). Use pre-built binaries or build from source for your OS (Windows, Linux, or MacOS).
-- Download the "South Building" dataset, which contains 20 images.
+- Download the a dataset, which contains 20 images.
 
 Steps
 
